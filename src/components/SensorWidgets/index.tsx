@@ -15,9 +15,9 @@ const sensorInfo = {
     icon: "humidity",
     units: "%"
   },
-  "co2": {
-    title: "CO2",
-    icon: "co2",
+  "co": {
+    title: "co",
+    icon: "co",
     units: "ppm"
   },
   "airQuality": {
