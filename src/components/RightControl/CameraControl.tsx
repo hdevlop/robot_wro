@@ -57,9 +57,9 @@ const CameraControl = () => {
    };
 
    return (
-      <div className="flex flex-col items-center p-4 gap-6 h-full relative">
+      <div className="flex flex-col items-center p-4 gap-4 h-full relative">
          <ChamferContainer borderColor='#1A320C' />
-         <Label className='text-xl text-red-500 tracking-wider'>CAMERA CONTROL</Label>
+         <Label className='text-xl  tracking-wider'>CAMERA CONTROL</Label>
 
          <div className="flex flex-col gap-3 w-full">
             <HorizontalSlider
@@ -79,7 +79,7 @@ const CameraControl = () => {
          <div className="flex flex-col gap-4 w-full">
             <ControlButton
                text="NIGHT VISION"
-               className='w-full h-14'
+               className='w-full h-12'
                active={nightVision}
                onClick={handleNightVisionToggle}
                icon='vision'
@@ -88,7 +88,7 @@ const CameraControl = () => {
 
             <ControlButton
                text="TRACKING"
-               className='w-full h-14'
+               className='w-full h-12'
                active={tracking}
                onClick={handleTrackingToggle}
                icon=''

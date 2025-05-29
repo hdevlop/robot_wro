@@ -11,11 +11,11 @@ const BatteryStatus = () => {
   return (
     <div className='flex flex-col w-full justify-center items-center relative p-2'>
       <ChamferContainer borderColor='#1A320C' />
-      <Label className='text-2xl'>BATTERY STATUS</Label>
+      <Label className='text-xl'>BATTERY STATUS</Label>
       <div className='flex justify-center items-center w-16 h-11'>
-        <NIcon icon='battery' size={64} />
+        <NIcon icon='battery' size={44} />
       </div>
-      <Label className='text-2xl'>{battery.level}%</Label>
+      <Label className='text-xl'>{battery.level}%</Label>
     </div>
   )
 }

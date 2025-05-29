@@ -11,9 +11,9 @@ const GpsPosition = () => {
   return (
     <div className='flex flex-col w-full justify-center items-center relative p-2 gap-2'>
       <ChamferContainer borderColor='#1A320C' />
-      <Label className='text-2xl'>GPS POSITION</Label>
+      <Label className='text-xl'>GPS POSITION</Label>
       <div className='flex justify-center items-center w-16 h-11'>
-        <NIcon icon='GPS' size={52} />
+        <NIcon icon='GPS' size={44} />
       </div>
       <div className='flex flex-col '>
 

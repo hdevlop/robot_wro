@@ -7,7 +7,7 @@ import { useEffect } from "react";
 
 export const useMqttSensors = () => {
    const { isConnected, error } = useMqtt();
-   const { message: sensorMessage } = useMessage(process.env.NEXT_PUBLIC_TOPICS_SENSORS);
+   const { message: sensorMsg } = useMessage(process.env.NEXT_PUBLIC_TOPICS_SENSORS);
    const setSensors = useRobotStore.use.setSensors();
    const setGps = useRobotStore.use.setGps();
    const setBattery = useRobotStore.use.setBattery();
@@ -24,32 +24,36 @@ export const useMqttSensors = () => {
 
 
    useEffect(() => {
-      if (sensorMessage) {
-         addToTerminal(JSON.stringify(sensorMessage));
-         const hasData =  sensorMessage.t 
+      if (sensorMsg) {
+         addToTerminal(JSON.stringify(sensorMsg));
+         const hasData = sensorMsg.t
+
+         if (sensorMsg.msg && !sensorMsg.t) {
+            setIsRobotConnected(sensorMsg.rs);
+         }
 
          if (hasData) {
             setSensors({
-               temperature: sensorMessage.t,
-               humidity: sensorMessage.h,
-               co: sensorMessage.c,
-               airQuality: sensorMessage.aq
+               temperature: sensorMsg.t,
+               humidity: sensorMsg.h,
+               co: sensorMsg.c,
+               airQuality: sensorMsg.aq
             });
 
             setGps({
-               latitude: sensorMessage.lat,
-               longitude: sensorMessage.lng
+               latitude: sensorMsg.lat,
+               longitude: sensorMsg.lng
             });
 
             setBattery({
-               level: sensorMessage.bat,
-               charging: sensorMessage.chg || false
+               level: sensorMsg.bat,
+               charging: sensorMsg.chg || false
             });
 
-            setIsRobotConnected(sensorMessage.rs);
+            setIsRobotConnected(sensorMsg.rs);
          }
       }
-   }, [sensorMessage]);
+   }, [sensorMsg]);
 
    return {
       isConnected
