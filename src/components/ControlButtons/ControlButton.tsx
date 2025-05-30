@@ -11,8 +11,8 @@ export const ControlButton = ({
    active,
    onMouseDown = null,
    onMouseUp = null,
-   onTouchStart,
-   onTouchEnd
+   onTouchStart= null,
+   onTouchEnd= null
 }) => {
 
    const hasIcon = icon !== null;
@@ -20,7 +20,7 @@ export const ControlButton = ({
 
    return (
       <div className='w-full h-full flex justify-center items-center cursor-pointer'>
-         <div className={cn("w-[70px] h-[70px] lg:w-20 lg:h-20 flex gap-2 relative justify-center items-center", className, active ? 'opacity-100' : 'opacity-60')}
+         <div className={cn("h-[70px] min-w-20 w-20 lg:h-20 flex gap-2 relative justify-center items-center", className, active ? 'opacity-100' : 'opacity-60')}
             onClick={onClick}
             onMouseDown={onMouseDown}
             onMouseUp={onMouseUp}

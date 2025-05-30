@@ -19,6 +19,16 @@ interface BatteryData {
     charging: boolean;
 }
 
+type AnalysisType = 'current' | 'emergency' | 'trend' | 'historical';
+
+interface AIAnalysisState {
+    isDialogOpen: boolean;
+    isAnalyzing: boolean;
+    analysisResult: string;
+    analysisType: AnalysisType | null;
+    lastAnalysisTime: number | null;
+}
+
 type MoveDirection = 'MOVE_FORWARD' | 'MOVE_BACKWARD' | 'MOVE_LEFT' | 'MOVE_RIGHT' | 'MOVE_STOP' | null;
 
 interface RobotState {
@@ -43,6 +53,8 @@ interface RobotState {
     lastAlarmMessage: string;
     lastAlarmTime: number | null;
 
+    aiAnalysis: AIAnalysisState;
+
     // Actions
     setSensors: (sensors: SensorData) => void;
     setGps: (gps: GpsData) => void;
@@ -62,6 +74,13 @@ interface RobotState {
     clearTerminal: () => void;
     setCriticalAlarm: (critical: boolean) => void;
     clearAlarm: () => void;
+
+    // AI Analysis Actions
+    openAnalysisDialog: () => void;
+    closeAnalysisDialog: () => void;
+    setIsAnalyzing: (analyzing: boolean) => void;
+    setAnalysisResult: (result: string, type: AnalysisType) => void;
+    clearAnalysisResult: () => void;
 }
 
 const robotStore = create<RobotState>()(
@@ -102,6 +121,14 @@ const robotStore = create<RobotState>()(
         lastAlarmMessage: '',
         lastAlarmTime: null,
 
+        aiAnalysis: {
+            isDialogOpen: false,
+            isAnalyzing: false,
+            analysisResult: '',
+            analysisType: null,
+            lastAnalysisTime: null
+        },
+
         setSensors: (sensors) => set({ sensors }),
         setGps: (gps) => set({ gps }),
         setBattery: (battery) => set({ battery }),
@@ -129,6 +156,37 @@ const robotStore = create<RobotState>()(
         setCriticalAlarm: (critical) => set({ criticalAlarm: critical }),
         clearAlarm: () => set({ criticalAlarm: false }),
 
+                // AI Analysis actions
+        openAnalysisDialog: () => set((state) => ({
+            aiAnalysis: { ...state.aiAnalysis, isDialogOpen: true }
+        })),
+
+        closeAnalysisDialog: () => set((state) => ({
+            aiAnalysis: { ...state.aiAnalysis, isDialogOpen: false }
+        })),
+
+        setIsAnalyzing: (analyzing) => set((state) => ({
+            aiAnalysis: { ...state.aiAnalysis, isAnalyzing: analyzing }
+        })),
+
+        setAnalysisResult: (result, type) => set((state) => ({
+            aiAnalysis: {
+                ...state.aiAnalysis,
+                analysisResult: result,
+                analysisType: type,
+                lastAnalysisTime: Date.now(),
+                isAnalyzing: false
+            }
+        })),
+
+        clearAnalysisResult: () => set((state) => ({
+            aiAnalysis: {
+                ...state.aiAnalysis,
+                analysisResult: '',
+                analysisType: null
+            }
+        })),
+
     }))
 );
 
@@ -150,3 +208,8 @@ export const useCameraTilt = () => useRobotStore.use.tilt();
 export const useCameraNightVision = () => useRobotStore.use.nightVision();
 export const useCameraTracking = () => useRobotStore.use.tracking();
 export const useCriticalAlarm = () => useRobotStore.use.criticalAlarm();
+
+// AI Analysis hooks
+export const useAIAnalysis = () => useRobotStore.use.aiAnalysis();
+export const useAnalysisDialog = () => useRobotStore.use.aiAnalysis().isDialogOpen;
+export const useIsAnalyzing = () => useRobotStore.use.aiAnalysis().isAnalyzing;

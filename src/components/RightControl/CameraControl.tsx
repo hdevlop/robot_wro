@@ -76,7 +76,7 @@ const CameraControl = () => {
             />
          </div>
 
-         <div className=" flex-col gap-4 w-full hidden lg:flex">
+         <div className=" flex-col gap-4 w-full hidden xl:flex">
             <ControlButton
                text="NIGHT VISION"
                className='w-full h-12 '

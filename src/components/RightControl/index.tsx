@@ -5,6 +5,7 @@ import GpsPosition from './GpsPosition'
 import CameraControl from './CameraControl'
 import SimpleTerminal from '../SimpleTerminal'
 import StatusIndicator from './StatusIndicator'
+import AnalysisButton from '../AirAnalysis/AnlysisButton'
 
 const RightControl = () => {
   return (
@@ -14,6 +15,7 @@ const RightControl = () => {
         <BatteryStatus/>
         <GpsPosition/>
         <CameraControl/>
+        <AnalysisButton/>
         {/* <SimpleTerminal/> */}
     </div>
   )

@@ -1,4 +1,5 @@
 'use client'
+import AIAnalysisDialog from '@/components/AirAnalysis';
 import { AlarmComponent } from '@/components/AlarmComponent';
 import ControlButtons from '@/components/ControlButtons'
 import FullscreenDialog from '@/components/FullscreenDialog';
@@ -21,6 +22,7 @@ const Dashboard = () => {
       <RightControl />
       <AlarmComponent/>
       <FullscreenDialog/>
+      <AIAnalysisDialog/>
     </div>
 
   )
