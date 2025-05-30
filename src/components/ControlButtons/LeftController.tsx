@@ -12,7 +12,7 @@ const LeftController = () => {
     const flashLight = useFlashlight();
 
     return (
-        <div className="flex flex-col gap-6 justify-center items-center h-[300px]">
+        <div className="flex flex-col  lg:gap-4 justify-center items-center h-full ">
             <ControlButton
                 icon="gripperClosed"
                 iconSize={60}

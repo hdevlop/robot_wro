@@ -16,7 +16,7 @@ const SpeedComponent = () => {
       `calc(${speed}% - ${(speed / 100) * thumbHeight}px)`;
 
   return (
-    <div className="flex flex-col items-center h-full px-4 bg-black">
+    <div className="flex flex-col items-center h-full px-4 ">
 
       <Label className='text-2xl mb-4'>SPEED</Label>
 

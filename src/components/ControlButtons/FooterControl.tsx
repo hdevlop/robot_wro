@@ -16,13 +16,13 @@ const FooterController = () => {
                 text="MANUAL"
                 active={currentMode === 'MANUAL'}
                 onClick={() => setManual()}
-                className='w-52 h-16'
+                className='w-52 h-14 lg:w-52 lg:h-16 '
             />
             <ControlButton
                 text="AUTONOMOUS"
                 active={currentMode === 'AUTO'}
                 onClick={() => setAuto()}
-                className='w-52 h-16'
+                className='w-52 h-14 lg:w-52 lg:h-16'
             />
         </div>
     )

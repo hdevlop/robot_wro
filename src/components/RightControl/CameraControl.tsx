@@ -76,10 +76,10 @@ const CameraControl = () => {
             />
          </div>
 
-         <div className="flex flex-col gap-4 w-full">
+         <div className=" flex-col gap-4 w-full hidden lg:flex">
             <ControlButton
                text="NIGHT VISION"
-               className='w-full h-12'
+               className='w-full h-12 '
                active={nightVision}
                onClick={handleNightVisionToggle}
                icon='vision'
@@ -88,7 +88,7 @@ const CameraControl = () => {
 
             <ControlButton
                text="TRACKING"
-               className='w-full h-12'
+               className='w-full h-12 '
                active={tracking}
                onClick={handleTrackingToggle}
                icon=''

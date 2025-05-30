@@ -17,7 +17,7 @@ const THRESHOLDS = {
     BUTANE_CRITICAL: 5000,
     AQI_CRITICAL: 200,
     TEMP_HIGH: 35,
-    TEMP_LOW: 5,
+    TEMP_LOW: -1,
     HUMIDITY_HIGH: 80
 };
 
@@ -29,7 +29,6 @@ export const AlarmComponent = () => {
     const [activeThresholds, setActiveThresholds] = useState([]);
     const [isDialogOpen, setIsDialogOpen] = useState(false);
 
-    // Check which thresholds are exceeded
     useEffect(() => {
         const exceeded = [];
         const temp = parseFloat(sensors.temperature);
