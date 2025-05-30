@@ -12,8 +12,8 @@ import { Loader2, Brain, AlertTriangle, TrendingUp, Clock } from "lucide-react";
 import { useRobotStore } from '@/stores/robotStore';
 
 const analyzeWithAI = async (type: 'current' | 'emergency' | 'trend' | 'historical', sensorData: any) => {
-  const GEMINI_API_KEY = "YOUR_GEMINI_API_KEY";
-  const GEMINI_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent";
+  const GEMINI_API_KEY = process.env.NEXT_PUBLIC_GEMINI_API_KEY;
+  const GEMINI_URL = process.env.NEXT_PUBLIC_GEMINI_URL;
   
   const prompts = {
     current: `Analyze current sensor readings: Temperature: ${sensorData.temperature}°C, CO: ${sensorData.co}ppm, Air Quality: ${sensorData.airQuality}. Provide safety assessment and recommendations.`,
