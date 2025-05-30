@@ -1,6 +1,7 @@
 'use client'
 import { AlarmComponent } from '@/components/AlarmComponent';
 import ControlButtons from '@/components/ControlButtons'
+import FullscreenDialog from '@/components/FullscreenDialog';
 import RightControl from '@/components/RightControl'
 import SensorWidgets from '@/components/SensorWidgets'
 import { useMqttSensors } from '@/hooks/useMqttSensors';
@@ -19,6 +20,7 @@ const Dashboard = () => {
       </div>
       <RightControl />
       <AlarmComponent/>
+      <FullscreenDialog/>
     </div>
 
   )
