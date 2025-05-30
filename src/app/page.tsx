@@ -1,4 +1,5 @@
 'use client'
+import { AlarmComponent } from '@/components/AlarmComponent';
 import ControlButtons from '@/components/ControlButtons'
 import RightControl from '@/components/RightControl'
 import SensorWidgets from '@/components/SensorWidgets'
@@ -17,6 +18,7 @@ const Dashboard = () => {
         <ControlButtons />
       </div>
       <RightControl />
+      <AlarmComponent/>
     </div>
 
   )

@@ -3,19 +3,19 @@ import { devtools } from 'zustand/middleware';
 import createSelectors from './selectors';
 
 interface SensorData {
-    temperature: number|string;
-    humidity: number|string;
-    co: number|string;
-    airQuality: number|string;
+    temperature: number | string;
+    humidity: number | string;
+    co: number | string;
+    airQuality: number | string;
 }
 
 interface GpsData {
-    latitude: number|string;
-    longitude: number|string;
+    latitude: number | string;
+    longitude: number | string;
 }
 
 interface BatteryData {
-    level: number|string;
+    level: number | string;
     charging: boolean;
 }
 
@@ -39,6 +39,10 @@ interface RobotState {
     nightVision: boolean;
     tracking: boolean;
     terminalMessages: string[];
+    criticalAlarm: boolean;
+    lastAlarmMessage: string;
+    lastAlarmTime: number | null;
+
     // Actions
     setSensors: (sensors: SensorData) => void;
     setGps: (gps: GpsData) => void;
@@ -56,6 +60,8 @@ interface RobotState {
     setCameraTracking: (tracking: boolean) => void;
     addToTerminal: (message: any) => void;
     clearTerminal: () => void;
+    setCriticalAlarm: (critical: boolean) => void;
+    clearAlarm: () => void;
 }
 
 const robotStore = create<RobotState>()(
@@ -91,6 +97,11 @@ const robotStore = create<RobotState>()(
         tracking: false,
         terminalMessages: [],
 
+        // Alarm state
+        criticalAlarm: false,
+        lastAlarmMessage: '',
+        lastAlarmTime: null,
+
         setSensors: (sensors) => set({ sensors }),
         setGps: (gps) => set({ gps }),
         setBattery: (battery) => set({ battery }),
@@ -115,6 +126,9 @@ const robotStore = create<RobotState>()(
 
         clearTerminal: () => set({ terminalMessages: [] }),
 
+        setCriticalAlarm: (critical) => set({ criticalAlarm: critical }),
+        clearAlarm: () => set({ criticalAlarm: false }),
+
     }))
 );
 
@@ -135,3 +149,4 @@ export const useCameraPan = () => useRobotStore.use.pan();
 export const useCameraTilt = () => useRobotStore.use.tilt();
 export const useCameraNightVision = () => useRobotStore.use.nightVision();
 export const useCameraTracking = () => useRobotStore.use.tracking();
+export const useCriticalAlarm = () => useRobotStore.use.criticalAlarm();

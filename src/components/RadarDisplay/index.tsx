@@ -10,7 +10,7 @@ interface DetectedObject {
 
 const RadarDisplay = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const detectedObjects = useRobotStore.use.detectedObjects();
+  const detectedObjects = [];
   const radarRange = 5; 
 
   useEffect(() => {
@@ -29,18 +29,14 @@ const RadarDisplay = () => {
 
 
     const drawRadar = () => {
-      // Effacer le canvas
       ctx.clearRect(0, 0, size, size);
 
-      // Sauvegarder le contexte
       ctx.save();
       
-      // Appliquer la rotation de -90 degrés
       ctx.translate(center, center);
       ctx.rotate(-Math.PI / 2);
       ctx.translate(-center, -center);
 
-      // Créer un masque pour ne montrer que la partie visible (180°)
       ctx.beginPath();
       ctx.moveTo(center, center);
       ctx.arc(center, center, radius, -Math.PI/2, Math.PI/2);
@@ -54,7 +50,6 @@ const RadarDisplay = () => {
       ctx.fillStyle = gradient;
       ctx.fillRect(0, 0, size, size);
 
-      // Dessiner le demi-cercle extérieur avec effet de lueur
       ctx.shadowColor = '#00ff00';
       ctx.shadowBlur = 10;
       ctx.beginPath();
@@ -63,7 +58,6 @@ const RadarDisplay = () => {
       ctx.lineWidth = 2;
       ctx.stroke();
 
-      // Dessiner les demi-cercles concentriques avec effet de transparence
       for (let i = 1; i <= 5; i++) {
         ctx.beginPath();
         ctx.arc(center, center, (radius * i) / 4, -Math.PI/2, Math.PI/2);
@@ -72,7 +66,6 @@ const RadarDisplay = () => {
         ctx.stroke();
       }
 
-      // Dessiner les lignes de repère (tous les 30 degrés)
       for (let i = 0; i <= 180; i += 30) {
         const angle = ((90 - i) * Math.PI) / 180;
         ctx.beginPath();
@@ -85,7 +78,6 @@ const RadarDisplay = () => {
         ctx.lineWidth = 1;
         ctx.stroke();
 
-        // Ajouter les graduations
         if (i !== 90) {
           const textRadius = radius + 15;
           const textX = center + textRadius * Math.cos(angle);
@@ -94,7 +86,6 @@ const RadarDisplay = () => {
           ctx.font = '12px Arial';
           ctx.textAlign = 'center';
           ctx.textBaseline = 'middle';
-          // Rotation inverse du texte pour le garder lisible
           ctx.save();
           ctx.translate(textX, textY);
           ctx.rotate(Math.PI / 2);
@@ -103,11 +94,9 @@ const RadarDisplay = () => {
         }
       }
 
-      // Dessiner la ligne de balayage avec effet de lueur
       const sweepAngle = (Date.now() / 50) % 180;
       const sweepRadians = ((90 - sweepAngle) * Math.PI) / 180;
       
-      // Effet de balayage avec dégradé plus visible
       const sweepGradient = ctx.createLinearGradient(
         center, center,
         center + radius * Math.cos(sweepRadians),
@@ -117,7 +106,6 @@ const RadarDisplay = () => {
       sweepGradient.addColorStop(0.5, 'rgba(0, 255, 0, 0.8)');
       sweepGradient.addColorStop(1, 'rgba(0, 255, 0, 0.2)');
 
-      // Dessiner la ligne de balayage principale
       ctx.beginPath();
       ctx.moveTo(center, center);
       ctx.lineTo(
@@ -128,7 +116,6 @@ const RadarDisplay = () => {
       ctx.lineWidth = 4;
       ctx.stroke();
 
-      // Ajouter un effet de lueur supplémentaire
       ctx.shadowColor = '#00ff00';
       ctx.shadowBlur = 15;
       ctx.beginPath();
@@ -142,7 +129,6 @@ const RadarDisplay = () => {
       ctx.stroke();
       ctx.shadowBlur = 0;
 
-      // Dessiner un petit cercle au bout de la ligne de balayage
       ctx.beginPath();
       ctx.arc(
         center + radius * Math.cos(sweepRadians),
@@ -154,7 +140,6 @@ const RadarDisplay = () => {
       ctx.fillStyle = '#00ff00';
       ctx.fill();
 
-      // Dessiner les objets détectés
       detectedObjects.forEach((obj: DetectedObject) => {
         if (obj.angle >= 0 && obj.angle <= 180) {
           const distance = Math.min(obj.distance, radarRange) / radarRange;
@@ -162,35 +147,28 @@ const RadarDisplay = () => {
           const x = center + radius * distance * Math.cos(angle);
           const y = center + radius * distance * Math.sin(angle);
 
-          // Effet de lueur pour les points
           ctx.shadowColor = '#ff0000';
           ctx.shadowBlur = 15;
 
-          // Dessiner le point
           ctx.beginPath();
           ctx.arc(x, y, 4, 0, 2 * Math.PI);
           ctx.fillStyle = '#ff0000';
           ctx.fill();
 
-          // Ajouter un effet de lueur plus large
           ctx.beginPath();
           ctx.arc(x, y, 8, 0, 2 * Math.PI);
           ctx.fillStyle = 'rgba(255, 0, 0, 0.2)';
           ctx.fill();
 
-          // Réinitialiser l'effet de lueur
           ctx.shadowBlur = 0;
         }
       });
 
-      // Restaurer le contexte pour enlever la rotation et le masque
       ctx.restore();
 
-      // Demander la prochaine frame
       requestAnimationFrame(drawRadar);
     };
 
-    // Démarrer l'animation
     drawRadar();
   }, [detectedObjects]);
 

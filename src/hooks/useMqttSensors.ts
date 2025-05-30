@@ -4,53 +4,72 @@ import { useRobotStore } from "@/stores/robotStore";
 import { useMessage, useMqtt } from "await-mqtt/client";
 import { useEffect } from "react";
 
-
 export const useMqttSensors = () => {
-   const { isConnected, error } = useMqtt();
+   const { isConnected } = useMqtt();
    const { message: sensorMsg } = useMessage(process.env.NEXT_PUBLIC_TOPICS_SENSORS);
+
    const setSensors = useRobotStore.use.setSensors();
    const setGps = useRobotStore.use.setGps();
    const setBattery = useRobotStore.use.setBattery();
    const setIsBrokerConnected = useRobotStore.use.setIsBrokerConnected();
    const setIsRobotConnected = useRobotStore.use.setIsRobotConnected();
    const addToTerminal = useRobotStore.use.addToTerminal();
+   const setCriticalAlarm = useRobotStore.use.setCriticalAlarm();
+
+   const messageHandlers = {
+      sensor: (data) => {
+         setSensors({
+            temperature: data.t,
+            humidity: data.h,
+            co: data.c,
+            airQuality: data.aq
+         });
+
+         setGps({
+            latitude: data.lat,
+            longitude: data.lng
+         });
+
+         setBattery({
+            level: data.bat,
+            charging: data.chg || false
+         });
+
+         setIsRobotConnected(data.rs);
+      },
+
+      status: (data) => {
+         setIsRobotConnected(data.status);
+      },
+
+      alarm: (data) => {
+         addToTerminal(`🚨 CRITICAL Alarm`);
+         setSensors({
+            temperature: data.t,
+            humidity: data.h,
+            co: data.c,
+            airQuality: data.aq
+         });
+         setCriticalAlarm(true);
+      }
+   };
 
    useEffect(() => {
-      if (isConnected) {
-         console.log('MQTT connected, subscribing to topics...');
-      }
       setIsBrokerConnected(isConnected);
    }, [isConnected]);
-
 
    useEffect(() => {
       if (sensorMsg) {
          addToTerminal(JSON.stringify(sensorMsg));
-         const hasData = sensorMsg.t
 
-         if (sensorMsg.msg && !sensorMsg.t) {
-            setIsRobotConnected(sensorMsg.rs);
-         }
+         const messageType = sensorMsg.type;
+         const messageData = sensorMsg.data;
 
-         if (hasData) {
-            setSensors({
-               temperature: sensorMsg.t,
-               humidity: sensorMsg.h,
-               co: sensorMsg.c,
-               airQuality: sensorMsg.aq
-            });
+         if (!messageType || !messageData) return;
 
-            setGps({
-               latitude: sensorMsg.lat,
-               longitude: sensorMsg.lng
-            });
-
-            setBattery({
-               level: sensorMsg.bat,
-               charging: sensorMsg.chg || false
-            });
-
-            setIsRobotConnected(sensorMsg.rs);
+         const handler = messageHandlers[messageType];
+         if (handler) {
+            handler(messageData);
          }
       }
    }, [sensorMsg]);
@@ -58,4 +77,4 @@ export const useMqttSensors = () => {
    return {
       isConnected
    };
-}
+};
