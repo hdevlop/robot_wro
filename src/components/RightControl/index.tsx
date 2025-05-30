@@ -5,7 +5,7 @@ import GpsPosition from './GpsPosition'
 import CameraControl from './CameraControl'
 import SimpleTerminal from '../SimpleTerminal'
 import StatusIndicator from './StatusIndicator'
-import AnalysisButton from '../AirAnalysis/AnlysisButton'
+import AnalysisButton from '../AiAnalysis/AnlysisButton'
 
 const RightControl = () => {
   return (

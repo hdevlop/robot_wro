@@ -29,6 +29,13 @@ interface AIAnalysisState {
     lastAnalysisTime: number | null;
 }
 
+interface DetectedObject {
+    angle: number;
+    distance: number;
+    timestamp: number;
+}
+
+
 type MoveDirection = 'MOVE_FORWARD' | 'MOVE_BACKWARD' | 'MOVE_LEFT' | 'MOVE_RIGHT' | 'MOVE_STOP' | null;
 
 interface RobotState {
@@ -54,6 +61,9 @@ interface RobotState {
     lastAlarmTime: number | null;
 
     aiAnalysis: AIAnalysisState;
+    detectedObjects: DetectedObject[];
+
+    radarDialog: boolean;
 
     // Actions
     setSensors: (sensors: SensorData) => void;
@@ -81,6 +91,12 @@ interface RobotState {
     setIsAnalyzing: (analyzing: boolean) => void;
     setAnalysisResult: (result: string, type: AnalysisType) => void;
     clearAnalysisResult: () => void;
+
+    addDetectedObject: (object: DetectedObject) => void;
+    clearDetectedObjects: () => void;
+
+    openRadarDialog: () => void;
+    closeRadarDialog: () => void;
 }
 
 const robotStore = create<RobotState>()(
@@ -129,6 +145,10 @@ const robotStore = create<RobotState>()(
             lastAnalysisTime: null
         },
 
+        detectedObjects: [],
+
+        radarDialog: false,
+
         setSensors: (sensors) => set({ sensors }),
         setGps: (gps) => set({ gps }),
         setBattery: (battery) => set({ battery }),
@@ -156,7 +176,7 @@ const robotStore = create<RobotState>()(
         setCriticalAlarm: (critical) => set({ criticalAlarm: critical }),
         clearAlarm: () => set({ criticalAlarm: false }),
 
-                // AI Analysis actions
+        // AI Analysis actions
         openAnalysisDialog: () => set((state) => ({
             aiAnalysis: { ...state.aiAnalysis, isDialogOpen: true }
         })),
@@ -187,6 +207,21 @@ const robotStore = create<RobotState>()(
             }
         })),
 
+        addDetectedObject: (object) => set((state) => ({
+            detectedObjects: [
+                ...state.detectedObjects.filter(obj =>
+                    // Garder seulement les objets des 5 dernières secondes
+                    Date.now() - obj.timestamp < 5000
+                ),
+                { ...object, timestamp: Date.now() }
+            ]
+        })),
+
+        clearDetectedObjects: () => set({ detectedObjects: [] }),
+
+openRadarDialog: () => set({ radarDialog: true }),
+        closeRadarDialog: () => set({ radarDialog: false }),
+
     }))
 );
 
@@ -213,3 +248,7 @@ export const useCriticalAlarm = () => useRobotStore.use.criticalAlarm();
 export const useAIAnalysis = () => useRobotStore.use.aiAnalysis();
 export const useAnalysisDialog = () => useRobotStore.use.aiAnalysis().isDialogOpen;
 export const useIsAnalyzing = () => useRobotStore.use.aiAnalysis().isAnalyzing;
+
+// Radar Dialog hooks
+export const useRadarDialog = () => useRobotStore.use.radarDialog();
+export const useIsRadarDialogOpen = () => useRobotStore.use.radarDialog();

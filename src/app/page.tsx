@@ -1,8 +1,9 @@
 'use client'
-import AIAnalysisDialog from '@/components/AirAnalysis';
+import AIAnalysisDialog from '@/components/AiAnalysis';
 import { AlarmComponent } from '@/components/AlarmComponent';
 import ControlButtons from '@/components/ControlButtons'
 import FullscreenDialog from '@/components/FullscreenDialog';
+import RadarDialog from '@/components/RadarDisplay';
 import RightControl from '@/components/RightControl'
 import SensorWidgets from '@/components/SensorWidgets'
 import { useMqttSensors } from '@/hooks/useMqttSensors';
@@ -23,6 +24,7 @@ const Dashboard = () => {
       <AlarmComponent/>
       <FullscreenDialog/>
       <AIAnalysisDialog/>
+      <RadarDialog/>
     </div>
 
   )
